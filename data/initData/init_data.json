@@ -1,0 +1,10 @@
+[
+    {
+        "id": "01",
+        "data": "user=%7B%22id%22%3A1311685101%2C%22first_name%22%3A%22x4404f%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22xkillyo%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-3147213760537300745&chat_type=sender&auth_date=1727738527&hash=a8db38b676c549f5caaac390e319e15db6013f120c6a985e5eac9c37e2b69884"
+    },
+    {
+        "id": "02",
+        "data": "user=%7B%22id%22%3A7259111661%2C%22first_name%22%3A%22laras%22%2C%22last_name%22%3A%22hati%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-6582047796666851227&chat_type=sender&auth_date=1727738551&hash=62fa85b645c101e32c535ab9c92a485d619b0503182893319aeae487e35f2d99"
+    }
+]

@@ -57,7 +57,8 @@ class Kuroro(Browser):
                     "sec-fetch-site": "same-site",
                     "Referer": "https://ranch.kuroro.com/",
                     "Referrer-Policy": "strict-origin-when-cross-origin",
-                }, timeout=50
+                }, 
+                timeout=50,
             )
 
             if response.status_code == 401:
@@ -258,7 +259,26 @@ class Kuroro(Browser):
                         except Exception as e:
                             print("Error during action execution:", e)
                             break
+                    while shards > 0:
+                        try:
+                            user = self.get_user(query_data, session_id)
+                            if user is None:
+                                print("Failed to retrieve updated user info.")
+                                break
 
+                            shards = user.get("shards")
+                            if shards:
+                                self.save_coordinates(query_data, self.coordinate_feed)
+                                self.perform_action(query_data, 1, 0)
+                                print(f"Sisa Energy: {shards}")
+
+                            if shards <= 0:
+                                print("shards is depleted. Exiting energy action loop.")
+                                break
+
+                        except Exception as e:
+                            print("Error during action execution:", e)
+                            break
                 except Exception as e:
                     print("Error in the energy loop:", e)
 

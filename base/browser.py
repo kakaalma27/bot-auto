@@ -25,8 +25,6 @@ class Browser:
         options.add_argument("--disable-session-crashed-bubble")
         options.add_argument("--no-zygote")
         options.add_argument("--noerrdialogs")
-        options.add_argument('--ignore-certificate-errors')
-        options.add_argument('--ignore-ssl-errors')
         driver = webdriver.Chrome(options=options)
         driver.maximize_window()  # Explicitly set the window size
         return driver

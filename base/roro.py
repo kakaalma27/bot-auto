@@ -63,7 +63,7 @@ class Kuroro(Browser):
 
             if response.status_code == 401:
                 print(f"Unauthorized access for session_id: {session_id}. Refreshing queryData...")
-                refreshed_data = self.bearer_instance.run_get_Bearer(url="https://web.telegram.org/a/#7263554914", session_id=session_id)
+                refreshed_data = self.bearer_instance.run_get_Bearer(url="https://web.telegram.org/a/#7263554914")
                 if refreshed_data:
                     print("Successfully refreshed bearer.")
                     return refreshed_data
@@ -155,8 +155,6 @@ class Kuroro(Browser):
 
     def update(self, query_data, upgrade_id, max_retries=3):
         payload = {"upgradeId": upgrade_id}
-        print("Payload being sent:", payload)
-
         for attempt in range(max_retries):
             try:
                 response = requests.post(
@@ -213,7 +211,7 @@ class Kuroro(Browser):
             return
 
         while True:
-            current_index = 0  # Reset index for a new iteration
+            current_index = 0 
             while current_index < len(self.query_data_entries):
                 entry = self.query_data_entries[current_index]
                 session_id = entry['id']
@@ -235,8 +233,9 @@ class Kuroro(Browser):
                     shards = user.get("shards")
                     print("Shards:", shards)
                 except Exception as e:
-                    print("Error during repaint action:", e)
-
+                    print("Error during processing:", e)
+                    current_index += 1  # Ensure to move to the next entry in case of error
+                    continue
                 try:
                     while energy_value > 0:
                         try:
@@ -281,10 +280,39 @@ class Kuroro(Browser):
                             break
                 except Exception as e:
                     print("Error in the energy loop:", e)
+                try:
+                    print("try Upgrades")
 
-                # Other actions can be added here
-                time.sleep(100)  # Adding a delay to prevent rapid requests
+                    updated_user_info = self.get_user(query_data, session_id)
+                    total_coins = round(updated_user_info['coinsSnapshot']['value'])
+                    print("Total cost:", total_coins)
 
-                current_index += 1
+                    upgrade_skill = self.purpose_upgrade(query_data)
+                    tolerance = total_coins * 0.9
+                    matching_items = []
 
+                    for item in upgrade_skill:
+                        if item['canBePurchased']:
+                            price_difference = abs(item['cost'] - total_coins)
+                            if price_difference <= tolerance:
+                                matching_items.append(item)
 
+                    if matching_items:
+                        first_matching_item = matching_items[0]
+                        print(f"First Matching Item: Name: {first_matching_item['name']}, Cost: {first_matching_item['cost']}, upgradeId: {first_matching_item['upgradeId']}")
+
+                        upgrade_id = first_matching_item['upgradeId']
+                        result = self.update(query_data, upgrade_id)
+                        print("Upgrades skill:", result['name'])
+                    else:
+                        print("No matching items found.")
+
+                    tiket = self.boosters(query_data)
+                    print(tiket['message'])
+                except Exception as e:
+                    print("Error during upgrade:", str(e))
+
+                current_index += 1  
+
+            print("All initData entries have been processed. Sleeping for 15 minutes.")
+            time.sleep(500)

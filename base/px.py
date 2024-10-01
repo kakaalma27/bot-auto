@@ -61,7 +61,7 @@ class notPixels(Browser):
             cek = response.json()
             if cek.get('code') == 6:
                 self.logger.warning(f"Unauthorized access for session_id: {session_id}. Refreshing initData...")
-                refreshed_data = self.initData_instance.run_get_initData(url="https://web.telegram.org/a/#7249432100", session_id=session_id)
+                refreshed_data = self.initData_instance.run_get_initData(url="https://web.telegram.org/a/#7249432100")
                 if refreshed_data:
                     self.logger.info("Successfully refreshed initData.")
                     return refreshed_data
@@ -168,5 +168,5 @@ class notPixels(Browser):
                 print(f"All charges used for {id}. Switching to next entry.")
                 current_index += 1
 
-            print("All initData entries have been processed. Sleeping for 10 minutes.")
-            time.sleep(100)
+            print("All initData entries have been processed. Sleeping for 15 minutes.")
+            time.sleep(500)

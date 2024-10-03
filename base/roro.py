@@ -3,7 +3,7 @@ import json
 import time
 import requests
 from random import randint
-from base.getQuery import Query
+from base.auth.getQuery import Query
 from base.browser import Browser
 from selenium import webdriver
 import sys
@@ -206,9 +206,6 @@ class Kuroro(Browser):
             return None
 
     def mainKuroro(self):
-        if not self.query_data_entries:
-            print("No valid queryData found. Please run querydata.py first.")
-            return
 
         while True:
             current_index = 0 
@@ -216,6 +213,14 @@ class Kuroro(Browser):
                 entry = self.query_data_entries[current_index]
                 session_id = entry['id']
                 query_data = entry['data']
+
+                user = self.get_user(query_data, session_id)
+
+                shards = user.get("shards")
+                if shards:
+                    self.save_coordinates(query_data, self.coordinate_feed)
+                    self.perform_action(query_data, 1, 0)
+                    print(f"Sisa shards: {shards}")
 
                 try:
                     print(f"Processing bearer entry: {session_id}")
@@ -269,7 +274,7 @@ class Kuroro(Browser):
                             if shards:
                                 self.save_coordinates(query_data, self.coordinate_feed)
                                 self.perform_action(query_data, 1, 0)
-                                print(f"Sisa Energy: {shards}")
+                                print(f"Sisa shards: {shards}")
 
                             if shards <= 0:
                                 print("shards is depleted. Exiting energy action loop.")
@@ -315,4 +320,4 @@ class Kuroro(Browser):
                 current_index += 1  
 
             print("All initData entries have been processed. Sleeping for 15 minutes.")
-            time.sleep(500)
+            time.sleep(100)

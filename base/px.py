@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import logging
-from base.getInitData import initData
+from base.auth.getInitData import initData
 from base.browser import Browser
 import sys
 
@@ -169,4 +169,4 @@ class notPixels(Browser):
                 current_index += 1
 
             print("All initData entries have been processed. Sleeping for 15 minutes.")
-            time.sleep(500)
+            time.sleep(100)
